@@ -26,7 +26,8 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "start:dev": "concurrently \"some script in here\" \"another concurrent script in here\" "
+    "start:dev": "concurrently \"npm run start:server\" \"npm start\" ",
+    "start:server": "node index.cjs"
   },
   "eslintConfig": {
     "extends": [
