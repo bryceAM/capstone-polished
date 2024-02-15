@@ -19,7 +19,7 @@ const path = require('path');
 server.use(express.static(path.join(__dirname, 'build')));
 
 // here's our API
-server.use('/api', require('./api'));
+server.use('/api', require('./api/index.cjs'));
 
 // by default serve up the react app if we don't recognize the route
 server.use((req, res, next) => {
@@ -27,12 +27,12 @@ server.use((req, res, next) => {
 });
 
 // bring in the DB connection
-const { client } = require('./db');
+const client = require('./db/client.cjs');
 
 // connect to the server
-const PORT = process.env.PORT || 4000;
-server.listen(PORT, async () => {
-  console.log(`Server is running on ${PORT}!`);
+const SERVER_PORT = process.env.SERVER_PORT || 4000;
+server.listen(SERVER_PORT, async () => {
+  console.log(`Server is running on ${SERVER_PORT}!`);
 
   try {
     await client.connect();
