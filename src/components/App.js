@@ -1,5 +1,6 @@
-import { Routes, Route } from 'react-router-dom'
-import { default as HomePage } from './HomePage.js'
+import { Routes, Route } from 'react-router-dom';
+import HomePage from './HomePage.js';
+import UnderConstruction from './UnderConstruction.js';
 import Context from '../context.js';
 import '../styles/App.css';
 
@@ -13,7 +14,7 @@ function App() {
       <Context.Provider value={contextValues}>
         <Routes>
           <Route path="/" element={<HomePage />} />
-          {/* <Route path="/UnderConstruction" element={<UnderConstruction />} /> */}
+          <Route path="/UnderConstruction" element={<UnderConstruction />} />
         </Routes>
       </Context.Provider>
     </div>
