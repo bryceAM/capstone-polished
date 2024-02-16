@@ -6,7 +6,7 @@ import '../styles/App.css';
 
 function App() {
   const contextValues = {
-    DB: `database string placeholder`
+    PlaceHolder: `remove and replace with your context values`
   }
 
   return (
