@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import { Link } from 'react-router-dom';
 import { fetchProducts } from '../axios-services/index.js'
 
@@ -15,7 +15,7 @@ function FeaturedProducts() {
                 }
             } catch (err) {
                 console.error(err);
-            }
+            };
         };
 
         getProducts();
@@ -36,9 +36,9 @@ function FeaturedProducts() {
                                     {product.description}
                                 </p>
                             </div>
-                            {/* <Link to={`/Products/${product.id}`}>
+                            <Link to={`/products/${product.id}`}>
                                 <img className="imgSmall" src={product.imgurl} />
-                            </Link> */}
+                            </Link>
                         </div>
                     );
                 })
@@ -46,7 +46,7 @@ function FeaturedProducts() {
                 <p>Error loading products</p>
             )}
         </div>
-    )
+    );
 }
 
 export default FeaturedProducts;
