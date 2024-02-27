@@ -1,0 +1,14 @@
+#nav_bar_inner {
+    height: 8rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+}
+
+#nav_bar_inner > *:hover {
+    filter: drop-shadow(2px 2px 2px #3586FF);
+}
+
+#test {
+    margin-top: 100px;
+  }
