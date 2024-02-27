@@ -15,10 +15,22 @@ const fetchProducts = async () => {
         const data = await axios.get(`/api/products/`);
         return data;
     } catch (err) {
-        console.error(err);
+        // propagate the error up to the invoking function in React
+        throw err;
     }
 };
 
+const fetchProduct = async (productId) => {
+    try {
+        const data = await axios.get(`/api/products/${productId}`);
+        return data;
+    } catch (err) {
+        // propagate the error up to the invoking function in React
+        throw err;
+    }
+}
+
 export {
-    fetchProducts
+    fetchProducts,
+    fetchProduct
 };
