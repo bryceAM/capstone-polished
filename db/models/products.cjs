@@ -130,7 +130,7 @@ async function getProductById(productId) {
         `, [productId]);
 
         if (!product) {
-            throw new Error('ProductNotFoundError: Could not find a product with that productId');
+            throw new Error(`ProductNotFoundError: Could not find product: ${productId}`);
         };
 
         return product;
