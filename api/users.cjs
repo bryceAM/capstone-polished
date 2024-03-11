@@ -65,7 +65,7 @@ usersRouter.post('/register', async (req, res, next) => {
             throw new Error('UserExistsError: A user by that name already exists');
         };
 
-        if (password.length < 6) throw new Error('PasswordLengthError: Password needs to be at least 6 characters!');
+        if (password.length < 6) throw new Error('PasswordLengthError: Password needs to be at least 6 characters');
 
         const user = await createUser({
             username, password, userEmail, userFirstName, userLastName, userLocation
