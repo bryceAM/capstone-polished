@@ -56,7 +56,7 @@ async function createOrder({
     };
 };
 
-async function getAllOrdersByUserID(userID) {
+async function getAllOrdersByUserId(userId) {
     /*
         get order from database by userID.
         if no orders, then return null instead of undefined so value can be checked.
@@ -67,7 +67,7 @@ async function getAllOrdersByUserID(userID) {
             SELECT *
             FROM orders
             WHERE "orderUserID" = $1;
-        `, [userID]);
+        `, [userId]);
 
         if (!rows || !rows.length) return null;
 
@@ -78,7 +78,7 @@ async function getAllOrdersByUserID(userID) {
     };
 };
 
-async function getOrderByOrderID(orderID) {
+async function getOrderByOrderId(orderId) {
     /*
         get array of orders from database by orderID.
         if no orders, then return null instead of undefined so value can be checked.
@@ -90,9 +90,11 @@ async function getOrderByOrderID(orderID) {
             SELECT * 
             FROM orders
             WHERE id = $1
-      `, [orderID]);
+        `, [orderId]);
 
-        if (!rows || !rows.length) return null;
+        if (rows && !rows.length) {
+            throw new Error(`OrderNotFoundError: Could not find order: ${orderId}`);
+        };
         
         const [order] = rows;
 
@@ -107,6 +109,6 @@ async function getOrderByOrderID(orderID) {
 module.exports = {
     getAllOrders,
     createOrder,
-    getAllOrdersByUserID,
-    getOrderByOrderID
+    getAllOrdersByUserId,
+    getOrderByOrderId
 }
