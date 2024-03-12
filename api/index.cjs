@@ -15,4 +15,7 @@ apiRouter.use('/products', productsRouter);
 const usersRouter = require('./users.cjs');
 apiRouter.use('/users', usersRouter);
 
+const ordersRouter = require('./orders.cjs');
+apiRouter.use('/orders', ordersRouter);
+
 module.exports = apiRouter;
