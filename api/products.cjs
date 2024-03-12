@@ -24,11 +24,7 @@ productsRouter.route('/')
             const { name, description, imgURL, price, categoryID } = req.body;
             const result = await createProduct({ name, description, imgURL, price, categoryID });
 
-            if (result.message) {
-                throw new Error(`${result.name}: ${result.message}`);
-            }
-
-            res.send({ name: name, description: description, price: price, categoryID: categoryID });
+            res.send(result);
         } catch (err) {
             // propagate error up to axios-services
             next(err);
@@ -51,45 +47,58 @@ productsRouter.route('/')
 
 productsRouter.route('/:productId')
     .get(async (req, res, next) => {
+        /*
+            destructure productId from the params of the route.
+            get product from the database by the product's ID.
+            send product to the calling function in the response.
+        */
         const { productId } = req.params;
 
         try {
-            const product = await getProductById(productId);
+            const result = await getProductById(productId);
             
-            res.send(product);
+            res.send(result);
         } catch (err) {
             // propagate error up to axios-services
             next(err);
         };
     })
     .patch(async (req, res, next) => {
-        const { productId } = req.params;
-        const validUpdates = Object.entries(req.body).filter(([key, value]) => (key === 'name' || key === 'description' || key === 'price' || key === 'categoryID') && value);
-        const updatedFields = Object.fromEntries(validUpdates);
-        
-        updatedFields.id = productId;
-
-        // pass the updated product object into updateProduct() function
-        const result = await updateProduct(updatedFields);
-
-        if (result.message) {
-            // handle the error message if the user is not an admin or if there was another error
-            next({ name: result.name, message: result.message });
-        } else {
-            // send back an object containing the result if no error messages
-            res.send({ name: result.name, description: result.description, price: result.price, categoryID: result.categoryID });
+        /*
+            destructure productId from the params of the route.
+            filter out all properties of the update object received from the request body that don't have values.
+            create a properly-formatted update object for manipulation.
+            update the product with the new update object.
+        */
+        try {
+            const { productId } = req.params;
+            const validUpdates = Object.entries(req.body).filter(([key, value]) => (key === 'name' || key === 'description' || key === 'price' || key === 'categoryID') && value);
+            const updatedFields = Object.fromEntries(validUpdates);
+            
+            updatedFields.id = productId;
+    
+            const result = await updateProduct(updatedFields);
+    
+            res.send(result);
+        } catch (err) {
+            // propagate error up to axios-services
+            next(err);
         }
     })
     .delete(async (req, res, next) => {
-        const { productId } = req.params;
-        const result = await Products.removeProduct(productId);
-
-        if (result.message) {
-            // handle the error message if the user is not an admin or if there was another error
-            next({ name: result.name, message: result.message });
-        } else {
-            // send back an object containing the result if no error messages
-            res.send({ name: result.name, description: result.description, price: result.price, categoryID: result.categoryID });
+        /*
+            destructure productId from the params of the route.
+            remove the product with said ID from the database.
+            send back in the response any info about the product just removed.
+        */
+        try {
+            const { productId } = req.params;
+            const result = await removeProduct(productId);
+    
+            res.send(result);
+        } catch (err) {
+            // propagate error up to axios-services
+            next(err);
         }
     })
 
