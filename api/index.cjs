@@ -7,8 +7,6 @@ apiRouter.get('/', (req, res, next) => {
   });
 });
 
-// this makes all of the calls to the module /api/products.js to use the /api/products/ route
-// for example, from cURLs, Postman, or 3rd party apps using our api
 const productsRouter = require('./products.cjs');
 apiRouter.use('/products', productsRouter);
 
@@ -17,5 +15,8 @@ apiRouter.use('/users', usersRouter);
 
 const ordersRouter = require('./orders.cjs');
 apiRouter.use('/orders', ordersRouter);
+
+const cartRouter = require('./cart.cjs');
+apiRouter.use('/cart', cartRouter);
 
 module.exports = apiRouter;
