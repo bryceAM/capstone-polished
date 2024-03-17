@@ -1,6 +1,6 @@
 const client = require('../client.cjs');
 const { randomBytes } = require('crypto')
-const { hashPassword, queryTransaction } = require('../databaseHelpers.cjs');
+const { hashPassword } = require('../databaseHelpers.cjs');
 const SALT_COUNT = 10;
 
 // destructure user info from user object sent via a register form submission
@@ -23,18 +23,12 @@ async function createUser({
         const hashedPassword = await hashPassword(password, salt, 64);
         const encodedHashedPassword = hashedPassword.toString('base64');
 
-        const user = await queryTransaction(
-            async (client) => {
-                const { rows: [userFromDB] } = await client.query(`
-                    INSERT INTO users(username, password, salt, userEmail, userFirstName, userLastName, userLocation, isAdmin)
-                    VALUES($1, $2, $3, $4, $5, $6, $7, $8)
-                    ON CONFLICT (username) DO NOTHING
-                    RETURNING *;
-                `, [username, encodedHashedPassword, salt, userEmail, userFirstName, userLastName, userLocation, isAdmin])
-            
-                return userFromDB;
-            }
-        );
+        const { rows: [user] } = await client.query(`
+            INSERT INTO users(username, password, salt, userEmail, userFirstName, userLastName, userLocation, isAdmin)
+            VALUES($1, $2, $3, $4, $5, $6, $7, $8)
+            ON CONFLICT (username) DO NOTHING
+            RETURNING *;
+        `, [username, encodedHashedPassword, salt, userEmail, userFirstName, userLastName, userLocation, isAdmin])
 
         return user;
     } catch (err) {

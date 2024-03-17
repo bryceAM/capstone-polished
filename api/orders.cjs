@@ -1,11 +1,12 @@
 const express = require('express');
+const ordersRouter = express.Router();
 const {
     getAllOrders,
     createOrder,
     getAllOrdersByUserId,
     getOrderByOrderId
 } = require('../db/models/orders.cjs');
-const ordersRouter = express.Router();
+const { queryTransaction } = require('../db/databaseHelpers.cjs');
 
 ordersRouter.route('/')
     .get(async (req, res, next) => {
@@ -50,7 +51,7 @@ ordersRouter.route('/')
                 orderTrackingNumber: orderTrackingNumber
             };
 
-            const result = await createOrder(orderData);
+            const result = await queryTransaction(() => createOrder(orderData));
 
             if (!result) {
                 throw new Error('OrderFailedError: No order created');

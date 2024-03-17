@@ -1,5 +1,4 @@
 const client = require('../client.cjs');
-const { queryTransaction } = require('../databaseHelpers.cjs');
 
 async function getAllOrders() {
     /*
@@ -37,17 +36,11 @@ async function createOrder({
         if error, the catch block will propagate it up the call stack and queryTransaction() will rollback the database to before the query.
     */
     try {
-        const order = await queryTransaction(
-            async (client) => {
-                const { rows: [orderFromDB] } = await client.query(`
-                    INSERT INTO orders("orderUserID", orderShipName, orderShipAddress, orderShipAddress2, orderCity, orderState, orderZip, orderEmail, orderShipped, orderTrackingNumber)
-                    VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
-                    RETURNING *;
-                `, [orderUserID, orderShipName, orderShipAddress, orderShipAddress2, orderCity, orderState, orderZip, orderEmail, orderShipped, orderTrackingNumber]);
-
-                return orderFromDB;
-            }
-        );
+        const { rows: [order] } = await client.query(`
+            INSERT INTO orders("orderUserID", orderShipName, orderShipAddress, orderShipAddress2, orderCity, orderState, orderZip, orderEmail, orderShipped, orderTrackingNumber)
+            VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+            RETURNING *;
+        `, [orderUserID, orderShipName, orderShipAddress, orderShipAddress2, orderCity, orderState, orderZip, orderEmail, orderShipped, orderTrackingNumber]);
 
         return order;
     } catch (err) {
@@ -95,7 +88,7 @@ async function getOrderByOrderId(orderId) {
         if (rows && !rows.length) {
             throw new Error(`OrderNotFoundError: Could not find order: ${orderId}`);
         };
-        
+
         const [order] = rows;
 
         return order;
