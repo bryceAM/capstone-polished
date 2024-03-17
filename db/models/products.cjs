@@ -1,28 +1,21 @@
 const client = require('../client.cjs');
-const { queryTransaction } = require('../databaseHelpers.cjs');
-
 
 async function createProduct({ name, description, imgURL, price, categoryID }) {
     /*
         create a new product in the database.
         if the product already exists, do nothing.
-        on error, rollback the database before the creation of the product.
+        on error, rollback the database before the creation of the product (see queryTransaction()).
         if no error, store the newly-created product info in a variable.
         return that product for manipulation and testing purposes.
     */
     try {
-        const product = await queryTransaction(
-            async (client) => {
-                const { rows: [productFromDB] } = await client.query(`
-                    INSERT INTO products(name, description, imgURL, price, "categoryId") 
-                    VALUES($1, $2, $3, $4, $5) 
-                    ON CONFLICT (name) DO NOTHING 
-                    RETURNING *;
-                `, [name, description, imgURL, price, categoryID]);
 
-                return productFromDB;
-            }
-        );
+        const { rows: [product] } = await client.query(`
+            INSERT INTO products(name, description, imgURL, price, "categoryId") 
+            VALUES($1, $2, $3, $4, $5) 
+            ON CONFLICT (name) DO NOTHING 
+            RETURNING *;
+        `, [name, description, imgURL, price, categoryID]);
 
         return product;
     } catch (error) {
@@ -157,20 +150,16 @@ async function updateProduct({ id, ...fields }) {
     };
 
     try {
-        const updates = await queryTransaction(
-            async (client) => {
-                const { rows } = await client.query(`
-                    UPDATE products
-                    SET ${setString}
-                    WERE id=${id}
-                    RETURNING *;
-                `, Object.values(fields));
 
-                return rows;
-            }
-        );
+        const { rows } = await client.query(`
+            UPDATE products
+            SET ${setString}
+            WERE id=${id}
+            RETURNING *;
+        `, Object.values(fields));
 
-        return updates;
+        return rows;
+
     } catch (err) {
         // propagate error to api/products.cjs
         throw err;

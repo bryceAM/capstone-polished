@@ -38,14 +38,14 @@ async function queryTransaction(queryFunction) {
     */
     try {
         await client.query(`BEGIN;`);
-        const result = await queryFunction(client);
+        const result = await queryFunction();
         await client.query(`COMMIT;`);
 
         return result;
-    } catch (error) {
+    } catch (err) {
         // roll the database back before throwing the error if the query function call made an unsuccessful query
         await client.query(`ROLLBACK;`);
-        throw error;
+        throw err;
     };
 };
 

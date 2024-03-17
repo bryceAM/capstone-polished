@@ -8,6 +8,7 @@ const {
     getUser,
     getAllUsers
 } = require('../db/models/users.cjs');
+const { queryTransaction } = require('../db/databaseHelpers.cjs');
 const { getAllOrdersByUserID } = require('../db/models/orders.cjs');
 
 usersRouter.post('/login', async (req, res, next) => {
@@ -67,9 +68,9 @@ usersRouter.post('/register', async (req, res, next) => {
 
         if (password.length < 6) throw new Error('PasswordLengthError: Password needs to be at least 6 characters');
 
-        const user = await createUser({
+        const user = await queryTransaction(() => createUser({
             username, password, userEmail, userFirstName, userLastName, userLocation
-        });
+        }));
 
         if (!user) throw new Error('UserCreationError: Unable to create user');
 

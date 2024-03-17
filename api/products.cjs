@@ -5,6 +5,9 @@ const {
     getProductById,
     updateProduct
 } = require('../db/models/products.cjs');
+const {
+    queryTransaction
+} = require('../db/databaseHelpers.cjs');
 
 productsRouter.use((req, res, next) => {
     console.log('a request is being made to /product');
@@ -22,7 +25,7 @@ productsRouter.route('/')
         */
         try {
             const { name, description, imgURL, price, categoryID } = req.body;
-            const result = await createProduct({ name, description, imgURL, price, categoryID });
+            const result = await queryTransaction(() => createProduct({ name, description, imgURL, price, categoryID }));
 
             res.send(result);
         } catch (err) {
@@ -77,7 +80,7 @@ productsRouter.route('/:productId')
             
             updatedFields.id = productId;
     
-            const result = await updateProduct(updatedFields);
+            const result = await queryTransaction(() => updateProduct(updatedFields));
     
             res.send(result);
         } catch (err) {
@@ -93,7 +96,7 @@ productsRouter.route('/:productId')
         */
         try {
             const { productId } = req.params;
-            const result = await removeProduct(productId);
+            const result = await queryTransaction(() => removeProduct(productId));
     
             res.send(result);
         } catch (err) {
