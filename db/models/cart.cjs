@@ -1,15 +1,15 @@
 const client = require('../client.cjs');
 
-async function createActiveCart({ userId }) {
+async function createActiveCart(cartId) {
     /*
     
     */
     try {
         const { rows: [cart] } = await client.query(`
-            INSERT INTO active_cart(user_id)
+            INSERT INTO active_cart(id)
             VALUES($1)
             RETURNING *;
-        `, [userId]);
+        `, [cartId]);
 
         return cart;
     } catch (err) {
@@ -36,7 +36,7 @@ async function getActiveCart(userId) {
     };
 };
 
-async function addItemToCart({ productId, cartId, quantity }) {
+async function addItemToCart(productId, cartId, quantity) {
     /*
     
     */
@@ -54,7 +54,7 @@ async function addItemToCart({ productId, cartId, quantity }) {
     };
 };
 
-async function updateQuantity(activeCartItemId, quantity) {
+async function updateQuantity(productId, cartId, quantity) {
     /*
     
     */
@@ -62,7 +62,7 @@ async function updateQuantity(activeCartItemId, quantity) {
         const { rows } = await client.query(`
             UPDATE active_cart_items
             SET quantity=${quantity}
-            WHERE id=${activeCartItemId}
+            WHERE active_cart_id=${cartId} AND product_id=${productId}
             RETURNING *;
         `);
 
@@ -72,14 +72,14 @@ async function updateQuantity(activeCartItemId, quantity) {
     };
 };
 
-async function removeItemFromCart(activeCartItemId) {
+async function removeItemFromCart(itemId) {
     /*
     
     */
     try {
         const { rows } = await client.query(`
             DELETE FROM active_cart_items
-            WHERE id=${activeCartItemId}
+            WHERE product_id=${itemId}
             RETURNING *;
         `);
 
@@ -108,11 +108,30 @@ async function getAllItemsInCart(cartId) {
     };
 };
 
+async function emptyCart(cartId) {
+    /*
+    
+    */
+    try {
+        const { rows } = await client.query(`
+            DELETE FROM active_cart_items
+            WHERE active_cart_id=$1
+            RETURNING *;
+        `, [cartId])
+
+        return rows;
+    } catch (err) {
+        // propagate error to api/cart.cjs
+        throw err;
+    };
+};
+
 module.exports = {
     createActiveCart,
     getActiveCart,
     addItemToCart,
     updateQuantity,
     removeItemFromCart,
-    getAllItemsInCart
+    getAllItemsInCart,
+    emptyCart
 }
