@@ -57,7 +57,7 @@ usersRouter.post('/register', async (req, res, next) => {
         send the user, message, and signed token back in the response to the calling function.
     */
     try {
-        const { username, password, userEmail, userFirstName, userLastName, userLocation } = req.body;
+        const { username, password, userEmail, userFirstName, userLastName, userAddress, userCity, userState, userZip } = req.body;
 
         const userExists = await getUserByUsername(username);
 
@@ -69,7 +69,7 @@ usersRouter.post('/register', async (req, res, next) => {
         if (password.length < 6) throw new Error('PasswordLengthError: Password needs to be at least 6 characters');
 
         const user = await queryTransaction(() => createUser({
-            username, password, userEmail, userFirstName, userLastName, userLocation
+            username, password, userEmail, userFirstName, userLastName, userAddress, userCity, userState, userZip
         }));
 
         if (!user) throw new Error('UserCreationError: Unable to create user');
@@ -104,14 +104,41 @@ usersRouter.get("/:username/orders", async (req, res, next) => {
             throw new Error(`NoUserError: Could not find user: ${username}`);
         };
         
-        if(req.user && user.id === req.user.id) {
+        if(user.id === req.user.id) {
             const orders = await getAllOrdersByUserID(user.id);
             
             res.send(orders);
         } else {
-            throw new Error('UnauthorizedAccessError: Not authorized to view content')
+            throw new Error('UnauthorizedAccessError: Not authorized to view content');
         };
 
+    } catch (err) {
+        // propagate error up to axios-services
+        next(err);
+    };
+});
+
+usersRouter.get('/token/:token', async (req, res, next) => {
+    /*
+        destructure the token from the params.
+        return the user to result if verification is successful.
+        send the user object in the response.
+    */
+    const { token } = req.params;
+
+    try {
+        const result = jwt.verify(token, JWT_SECRET);
+
+        res.send(result);
+    } catch (err) {
+        // propagate error up to axios-services
+        next(err);
+    };
+});
+
+usersRouter.get('/me', async (req, res, next) => {
+    try {
+        res.send(req.user);
     } catch (err) {
         // propagate error up to axios-services
         next(err);
@@ -131,6 +158,21 @@ usersRouter.get('/', async (req, res, next) => {
         // propagate error up to axios-services
         next(err)
     };
+});
+
+usersRouter.get('/:username', async (req, res, next) => {
+    const { username } = req.params;
+
+    try {
+        const result = await getUserByUsername(username);
+
+        delete result.password;
+
+        res.send(result);
+    } catch (err) {
+        // propagate error up to axios-services
+        next(err);
+    }
 });
 
 module.exports = usersRouter;
