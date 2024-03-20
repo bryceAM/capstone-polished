@@ -3,7 +3,9 @@ const productsRouter = express.Router();
 const {
     getAllProducts,
     getProductById,
-    updateProduct
+    updateProduct,
+    createProduct,
+    removeProduct
 } = require('../db/models/products.cjs');
 const {
     queryTransaction
@@ -46,7 +48,7 @@ productsRouter.route('/')
             // propagate error up to axios-services
             next(err);
         };
-    })
+    });
 
 productsRouter.route('/:productId')
     .get(async (req, res, next) => {
@@ -86,7 +88,7 @@ productsRouter.route('/:productId')
         } catch (err) {
             // propagate error up to axios-services
             next(err);
-        }
+        };
     })
     .delete(async (req, res, next) => {
         /*
@@ -102,7 +104,7 @@ productsRouter.route('/:productId')
         } catch (err) {
             // propagate error up to axios-services
             next(err);
-        }
-    })
+        };
+    });
 
 module.exports = productsRouter;
