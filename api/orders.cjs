@@ -18,7 +18,7 @@ ordersRouter.route('/')
         try {
             const result = await getAllOrders();
 
-            if (result.length <= 0) {
+            if (!result || result.length <= 0) {
                 throw new Error('MissingOrdersError: No orders found');
             };
 
@@ -37,7 +37,7 @@ ordersRouter.route('/')
             propagate any error up to axios, whether the custom error or another error from database or database function.
         */
         try {
-            const { orderUserID, orderShipName, orderShipAddress, orderShipAddress2, orderCity, orderState, orderZip, orderEmail, orderShipped, orderTrackingNumber } = req.body;
+            const { orderUserID, orderShipName, orderShipAddress, orderShipAddress2, orderCity, orderState, orderZip, orderEmail, orderShipped, orderTrackingNumber, orderProducts } = req.body;
             const orderData = {
                 orderUserID: orderUserID,
                 orderShipName: orderShipName,
@@ -48,7 +48,8 @@ ordersRouter.route('/')
                 orderZip: orderZip,
                 orderEmail: orderEmail,
                 orderShipped: orderShipped,
-                orderTrackingNumber: orderTrackingNumber
+                orderTrackingNumber: orderTrackingNumber,
+                orderProducts: orderProducts
             };
 
             const result = await queryTransaction(() => createOrder(orderData));
@@ -64,10 +65,14 @@ ordersRouter.route('/')
         };
     })
 
-ordersRouter.get('/:orderId', async (req, res, next) => {
+ordersRouter.get('/id/:orderId', async (req, res, next) => {
     try {
         const { orderId } = req.params
         const result = getOrderByOrderId(orderId)
+
+        if (!result || result.length <= 0) {
+            throw new Error(`MissingOrderError: Could not find order: ${orderId}`);
+        };
 
         res.send(result);
     } catch (err) {
