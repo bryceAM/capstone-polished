@@ -19,7 +19,7 @@ async function getAllOrders() {
 };
 
 async function createOrder({
-    orderUserID,
+    orderUserId,
     orderShipName,
     orderShipAddress,
     orderShipAddress2,
@@ -37,10 +37,10 @@ async function createOrder({
     */
     try {
         const { rows: [order] } = await client.query(`
-            INSERT INTO orders("orderUserID", orderShipName, orderShipAddress, orderShipAddress2, orderCity, orderState, orderZip, orderEmail, orderShipped, orderTrackingNumber)
+            INSERT INTO orders(orderuserid, orderShipName, orderShipAddress, orderShipAddress2, orderCity, orderState, orderZip, orderEmail, orderShipped, orderTrackingNumber)
             VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
             RETURNING *;
-        `, [orderUserID, orderShipName, orderShipAddress, orderShipAddress2, orderCity, orderState, orderZip, orderEmail, orderShipped, orderTrackingNumber]);
+        `, [orderUserId, orderShipName, orderShipAddress, orderShipAddress2, orderCity, orderState, orderZip, orderEmail, orderShipped, orderTrackingNumber]);
 
         return order;
     } catch (err) {
@@ -65,7 +65,7 @@ async function getAllOrdersByUserId(userId) {
         if (!rows || !rows.length) return null;
 
         return rows;
-    } catch (error) {
+    } catch (err) {
         // propagate error to api/orders.cjs
         throw err;
     };

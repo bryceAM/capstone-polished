@@ -37,9 +37,9 @@ ordersRouter.route('/')
             propagate any error up to axios, whether the custom error or another error from database or database function.
         */
         try {
-            const { orderUserID, orderShipName, orderShipAddress, orderShipAddress2, orderCity, orderState, orderZip, orderEmail, orderShipped, orderTrackingNumber, orderProducts } = req.body;
+            const { orderUserId, orderShipName, orderShipAddress, orderShipAddress2, orderCity, orderState, orderZip, orderEmail, orderShipped, orderTrackingNumber, orderProducts } = req.body;
             const orderData = {
-                orderUserID: orderUserID,
+                orderUserId: orderUserId,
                 orderShipName: orderShipName,
                 orderShipAddress: orderShipAddress,
                 orderShipAddress2: orderShipAddress2,

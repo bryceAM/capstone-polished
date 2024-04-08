@@ -37,7 +37,7 @@ function FeaturedProducts() {
                                 </p>
                             </div>
                             <Link to={`/products/${product.id}`}>
-                                <img className="imgSmall" src={product.imgurl} />
+                                <img className="imgSmall" src={product.imgURL} />
                             </Link>
                         </div>
                     );
