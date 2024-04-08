@@ -1,6 +1,6 @@
 const client = require('../client.cjs');
 
-async function createProduct({ name, description, imgURL, price, categoryID }) {
+async function createProduct({ name, description, imgURL, price, categoryId }) {
     /*
         create a new product in the database.
         if the product already exists, do nothing.
@@ -11,16 +11,16 @@ async function createProduct({ name, description, imgURL, price, categoryID }) {
     try {
 
         const { rows: [product] } = await client.query(`
-            INSERT INTO products(name, description, imgURL, price, "categoryId") 
+            INSERT INTO products(name, description, imgurl, price, categoryid) 
             VALUES($1, $2, $3, $4, $5) 
             ON CONFLICT (name) DO NOTHING 
             RETURNING *;
-        `, [name, description, imgURL, price, categoryID]);
+        `, [name, description, imgURL, price, categoryId]);
 
         return product;
-    } catch (error) {
+    } catch (err) {
         // propagate error up to api/products.cjs
-        throw error;
+        throw err;
     };
 };
 
@@ -36,9 +36,9 @@ async function getAllProducts() {
             FROM products;
         `);
 
-        if (!rows) {
+        if (!rows || rows.length <= 0) {
             throw new Error('ProductsNotFoundError: Could not find products')
-        }
+        };
 
         return rows;
     } catch (err) {
@@ -46,37 +46,6 @@ async function getAllProducts() {
         throw err;
     };
 };
-
-/*
-// under construction:
-async function addProduct({ name, description, imgURL, price, categoryID }) {
-  const users = await User.getAllUsers();
-  // under construction: have to add curUser variable that stores user info upon login
-  const user = users.filter((entry) => entry.username == curUser.username);
-
-  if (user.isAdmin) {
-    try {
-      const result = await createProduct({
-        name,
-        description,
-        imgURL,
-        price,
-        categoryID,
-      });
-
-      return result;
-    } catch (error) {
-      throw error;
-    }
-  } else {
-    // return an error object to use in the front end to display the error message
-    return {
-      name: `InvalidAuthorizationError`,
-      message: 'This account lacks administrative privilege',
-    };
-  };
-};
-*/
 
 /*
 // under construction:
@@ -150,7 +119,6 @@ async function updateProduct({ id, ...fields }) {
     };
 
     try {
-
         const { rows } = await client.query(`
             UPDATE products
             SET ${setString}
@@ -159,7 +127,6 @@ async function updateProduct({ id, ...fields }) {
         `, Object.values(fields));
 
         return rows;
-
     } catch (err) {
         // propagate error to api/products.cjs
         throw err;
@@ -170,5 +137,6 @@ module.exports = {
     getAllProducts,
     getProductById,
     updateProduct,
-    createProduct
+    createProduct,
+    // removeProduct
 };

@@ -33,7 +33,7 @@ function SingleProduct() {
                             <br />
                             {product.description}
                             <br />
-                            <img src={product.imgurl} width='150' />
+                            <img src={product.imgURL} width='150' />
                         </p>
                         <button className='add-to-cart'>Add To Cart</button>
                     </div> :

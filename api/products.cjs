@@ -26,8 +26,8 @@ productsRouter.route('/')
             if no error, send back the newly created product info in the reponse.
         */
         try {
-            const { name, description, imgURL, price, categoryID } = req.body;
-            const result = await queryTransaction(() => createProduct({ name, description, imgURL, price, categoryID }));
+            const { name, description, imgURL, price, categoryId } = req.body;
+            const result = await queryTransaction(() => createProduct({ name, description, imgURL, price, categoryId }));
 
             res.send(result);
         } catch (err) {
@@ -77,7 +77,7 @@ productsRouter.route('/:productId')
         */
         try {
             const { productId } = req.params;
-            const validUpdates = Object.entries(req.body).filter(([key, value]) => (key === 'name' || key === 'description' || key === 'price' || key === 'categoryID') && value);
+            const validUpdates = Object.entries(req.body).filter(([key, value]) => (key === 'name' || key === 'description' || key === 'price' || key === 'categoryid') && value);
             const updatedFields = Object.fromEntries(validUpdates);
             
             updatedFields.id = productId;
