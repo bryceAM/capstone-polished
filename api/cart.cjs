@@ -35,11 +35,9 @@ cartRouter.route('/owner/:userId')
             later this active cart will be added to the orders table in the database with this transactionId as the primary key of the orderId.
         */
         const { userId } = req.params;
-        const transactionId = (Math.floor(Math.random() * 100000)) / 100000;
-        const cartId = userId + transactionId;
 
         try {
-            const result = await queryTransaction(() => createActiveCart(cartId));
+            const result = await queryTransaction(() => createActiveCart(userId));
 
             res.send(result);
         } catch (err) {
