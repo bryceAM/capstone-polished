@@ -24,6 +24,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "db:build": "node ./db/init_db.cjs",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "start:dev": "concurrently \"npm run start:server\" \"npm start\" ",
