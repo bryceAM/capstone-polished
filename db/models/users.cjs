@@ -39,7 +39,7 @@ async function createUser({
             whether hashing fails or database seeding fails, both result in unsuccessful user creation, albeit different messages
             propagate error up to db/databaseHelpers.cjs, and db/init_db.cjs or api/users.cjs
         */
-        throw new Error('Failed to create user:', err.message);
+        throw new Error(`CreateUserError: ${err.message}`);
     };
 };
 
