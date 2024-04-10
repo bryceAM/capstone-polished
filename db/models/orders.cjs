@@ -19,6 +19,7 @@ async function getAllOrders() {
 };
 
 async function createOrder({
+    id,
     orderUserId,
     orderShipName,
     orderShipAddress,
@@ -28,19 +29,26 @@ async function createOrder({
     orderZip,
     orderEmail,
     orderShipped,
-    orderTrackingNumber
+    orderTrackingNumber,
+    orderProducts
 }) {
     /*
         retrieve order from database, using query transaction to handle transactional behavior of query.
         destructure order from database and return it.
         if error, the catch block will propagate it up the call stack and queryTransaction() will rollback the database to before the query.
     */
+
     try {
         const { rows: [order] } = await client.query(`
-            INSERT INTO orders(orderuserid, orderShipName, orderShipAddress, orderShipAddress2, orderCity, orderState, orderZip, orderEmail, orderShipped, orderTrackingNumber)
-            VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
+            INSERT INTO orders(id, "orderUserID", ordershipname, ordershipaddress, ordershipaddress2, ordercity, orderstate, orderzip, orderemail, ordershipped, ordertrackingnumber, orderproducts)
+            VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+            ON CONFLICT (id) DO NOTHING
             RETURNING *;
-        `, [orderUserId, orderShipName, orderShipAddress, orderShipAddress2, orderCity, orderState, orderZip, orderEmail, orderShipped, orderTrackingNumber]);
+        `, [id, orderUserId, orderShipName, orderShipAddress, orderShipAddress2, orderCity, orderState, orderZip, orderEmail, orderShipped, orderTrackingNumber, orderProducts]);
+
+        if (!order) {
+            throw new Error('OrderConflictError: order id already exists');
+        };
 
         return order;
     } catch (err) {
