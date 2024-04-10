@@ -1,15 +1,22 @@
 const client = require('../client.cjs');
 
-async function createActiveCart(cartId) {
+
+async function createActiveCart(userId) {
     /*
-    
+        each person has one active cart.
+        this function creates a cart with the specified cartId.
+        cartId = userId + transactionId
+        cartId takes the form of a whole number with a decimal appended to it.
     */
     try {
+        const transactionId = (Math.floor(Math.random() * 100000)) / 100000;
+        const cartId = userId + transactionId;
+
         const { rows: [cart] } = await client.query(`
-            INSERT INTO active_cart(id)
-            VALUES($1)
+            INSERT INTO active_cart(id, user_id)
+            VALUES($1, $2)
             RETURNING *;
-        `, [cartId]);
+        `, [cartId, userId]);
 
         return cart;
     } catch (err) {
@@ -36,7 +43,7 @@ async function getActiveCart(userId) {
     };
 };
 
-async function addItemToCart(productId, cartId, quantity) {
+async function addItemToCart({productId, cartId, quantity}) {
     /*
     
     */
@@ -54,7 +61,7 @@ async function addItemToCart(productId, cartId, quantity) {
     };
 };
 
-async function updateQuantity(productId, cartId, quantity) {
+async function updateQuantity({productId, cartId, quantity}) {
     /*
     
     */
