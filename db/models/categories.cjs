@@ -1,5 +1,6 @@
 const client = require('../client.cjs');
-async function createCategory({ categoryName }) {
+
+async function createCategory(categoryName) {
     /*
         in init_db.js an object with a single camel-cased property name is passed to this function.
         insert the category to be created in the lower-cased categoryname database field.
