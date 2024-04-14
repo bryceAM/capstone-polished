@@ -77,7 +77,7 @@ productsRouter.route('/:productId')
         */
         try {
             const { productId } = req.params;
-            const validUpdates = Object.entries(req.body).filter(([key, value]) => (key === 'name' || key === 'description' || key === 'price' || key === 'categoryid') && value);
+            const validUpdates = Object.entries(req.body).filter(([key, value]) => (key === 'name' || key === 'description' || key === 'price' || key === 'categoryId') && value);
             const updatedFields = Object.fromEntries(validUpdates);
             
             updatedFields.id = productId;
