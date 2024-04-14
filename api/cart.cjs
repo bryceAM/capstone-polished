@@ -46,14 +46,16 @@ cartRouter.route('/owner/:userId')
         };
     });
 
-cartRouter.delete('/remove/:itemId', async (req, res, next) => {
+cartRouter.delete('/remove', async (req, res, next) => {
     /*
-        removes all items, regardless of quantity, of id itemId from the active cart.
+        removes all items of id itemId from the active cart of specified id,
+        regardless of quantity. destructure the necessary info from the request
+        body.
     */
-    const { itemId } = req.params;
+    const { cartId, itemId } = req.body;
 
     try {
-        const result = await queryTransaction(() => removeItemFromCart(itemId));
+        const result = await queryTransaction(() => removeItemFromCart(cartId, itemId));
 
         res.send(result);
     } catch (err) {
