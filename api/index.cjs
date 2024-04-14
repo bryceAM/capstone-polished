@@ -7,6 +7,9 @@ apiRouter.get('/', (req, res, next) => {
   });
 });
 
+const homeRouter = require('./home.cjs');
+apiRouter.use('/', homeRouter);
+
 const productsRouter = require('./products.cjs');
 apiRouter.use('/products', productsRouter);
 
