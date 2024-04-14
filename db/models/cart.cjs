@@ -27,7 +27,7 @@ async function createActiveCart(userId) {
 
 async function getActiveCart(userId) {
     /*
-    
+        gets the cart of a specified user
     */
     try {
         const { rows } = await client.query(`
@@ -45,7 +45,9 @@ async function getActiveCart(userId) {
 
 async function addItemToCart({productId, cartId, quantity}) {
     /*
-    
+        adds one or more of the same type of product from the database into the cart
+        with the specified cart id. the cart id will need to be of the form 123456.12345
+        and sent from the front-end.
     */
     try {
         const { rows } = await client.query(`
@@ -63,32 +65,34 @@ async function addItemToCart({productId, cartId, quantity}) {
 
 async function updateQuantity({productId, cartId, quantity}) {
     /*
-    
+        update the quantity of the specified product in the cart with the specified id.
     */
     try {
         const { rows } = await client.query(`
             UPDATE active_cart_items
-            SET quantity=${quantity}
-            WHERE active_cart_id=${cartId} AND product_id=${productId}
+            SET quantity = $3
+            WHERE active_cart_id = $1 AND product_id = $2
             RETURNING *;
-        `);
+        `, [cartId, productId, quantity]);
 
         return rows;
     } catch (err) {
+        // propagate error to api/cart.cjs
         throw err;
     };
 };
 
-async function removeItemFromCart(itemId) {
+async function removeItemFromCart(cartId, itemId) {
     /*
-    
+        remove an entire item entry (product bundle with one or more products of that type)
+        of specified item id from an active cart of specified cart id.
     */
     try {
         const { rows } = await client.query(`
             DELETE FROM active_cart_items
-            WHERE product_id=${itemId}
+            WHERE active_cart_id = $1 AND product_id = $2
             RETURNING *;
-        `);
+        `, [cartId, itemId]);
 
         return rows;
     } catch (err) {
