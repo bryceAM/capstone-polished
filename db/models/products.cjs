@@ -111,7 +111,9 @@ async function updateProduct({ id, ...fields }) {
         if no error occurs, return the updated data for manipulation and testing purposes.
     */
     const setString = Object.keys(fields)
-        .map((key, index) => `"${key}"=$${index + 1}`)
+        // removed the double quotes around the key, so postgres will treat the key names more forgivingly
+        // .map((key, index) => `"${key}"=$${index + 1}`)
+        .map((key, index) => `${key}=$${index + 1}`)
         .join(',');
 
     if (setString.length === 0) {
