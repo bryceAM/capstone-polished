@@ -277,6 +277,111 @@ const removeProduct = async (productId) => {
     };
 };
 
+// USERS
+
+const loginUser = async (username, password) => {
+    /*
+        this function uses an api/users post route to log a user into
+        the website.
+    */
+    try {
+        const data = await axios.post(`/api/users/login/`, {
+            username: username,
+            password: password
+        });
+        
+        return data;
+    } catch (err) {
+        // propagate the error up to the component
+        throw err;
+    };
+};
+
+const insertUser = async (username, password, userEmail, userFirstName, userLastName, userAddress, userCity, userState, userZip) => {
+    /*
+        this function uses an api/users post route to create a new
+        user in the database.
+    */
+    try {
+        const data = await axios.post(`/api/users/register/`, {
+            username: username,
+            password: password,
+            userEmail: userEmail,
+            userFirstName: userFirstName,
+            userLastName: userLastName,
+            userAddress: userAddress,
+            userCity: userCity,
+            userState: userState,
+            userZip: userZip
+        });
+
+        return data;
+    } catch (err) {
+        // propagate the error up to the component
+        throw err;
+    };
+};
+
+const fetchOrdersByUser = async (username) => {
+    /*
+        this function uses an api/users get route to retrieve all orders of
+        a user with the specified username.
+    */
+    try {
+        const data = await axios.get(`/api/users/${username}/orders`);
+
+        return data;
+    } catch (err) {
+        // propagate the error up to the component
+        throw err;
+    };
+};
+
+const verifyUser = async (token) => {
+    /*
+        this function uses an api/users get route to verify a user
+        and return important user credentials.
+    */
+    try {
+        const data = await axios.get(`/api/users/${token}`);
+
+        return data;
+    } catch (err) {
+        // propagate the error up to the component
+        throw err;
+    };
+};
+
+const fetchUsers = async () => {
+    /*
+        this function uses an api/users get route to return all users from
+        the database.
+    */
+    try {
+        const data = await axios.get(`/api/users/`);
+
+        return data;
+    } catch (err) {
+        // propagate the error up to the component
+        throw err;
+    };
+};
+
+const fetchUser = async (username) => {
+    /*
+        this function uses an api/users get route to return a user
+        from the database with the specified username.
+    */
+    try {
+        const data = await axios.get(`/api/users/${username}`);
+
+        return data;
+    } catch (err) {
+        // propagate the error up to the component
+        throw err;
+    };
+};
+
 export {
     fetchCart,
     createCart,
@@ -294,5 +399,12 @@ export {
     fetchProducts,
     fetchProduct,
     modifyProduct,
-    removeProduct
+    removeProduct,
+
+    loginUser,
+    insertUser,
+    fetchOrdersByUser,
+    verifyUser,
+    fetchUsers,
+    fetchUser
 }
