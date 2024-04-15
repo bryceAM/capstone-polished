@@ -51,8 +51,8 @@ const removeItemFromCart = async (cartId, itemId) => {
     } catch (err) {
         // propagate the error up to the component
         throw err;
-    }
-}
+    };
+};
 
 const fetchItemsInCart = async (cartId) => {
     /*
@@ -112,6 +112,66 @@ const emptyCart = async (cartId) => {
     */
     try {
         const data = await axios.delete(`/api/cart/${cartId}`);
+
+        return data;
+    } catch (err) {
+        // propagate the error up to the component
+        throw err;
+    };
+};
+
+// ORDERS
+
+const fetchOrders = async () => {
+    /*
+        this function uses an api/orders get route to get all orders from the
+        database.
+    */
+    try {
+        const data = await axios.get(`/api/orders/`);
+
+        return data;
+    } catch (err) {
+        // propagate the error up to the component
+        throw err;
+    };
+};
+
+const insertOrder = async (cartId, orderUserId, orderShipName, orderShipAddress, orderShipAddress2, orderCity, orderState, orderZip, orderEmail, orderShipped, orderTrackingNumber, orderProducts) => {
+    /*
+        this function uses api/orders post route to insert a new order
+        in the database
+    */
+    try {
+        const data = await axios.post(`/api/orders/`, {
+            cartId: cartId,
+            orderUserId: orderUserId,
+            orderShipName: orderShipName,
+            orderShipAddress: orderShipAddress,
+            orderShipAddress2: orderShipAddress2,
+            orderCity: orderCity,
+            orderState: orderState,
+            orderZip: orderZip,
+            orderEmail: orderEmail,
+            orderShipped: orderShipped,
+            orderTrackingNumber: orderTrackingNumber,
+            orderProducts: orderProducts
+        });
+
+        return data;
+    } catch (err) {
+        // propagate the error up to the component
+        throw err;
+    };
+};
+
+const fetchOrder = async (orderId) => {
+    /*
+        this function uses an api/orders get route to get an order with the
+        specified order id from the database.
+    */
+    try {
+        const data = await axios.get(`/api/orders/id/${orderId}`);
 
         return data;
     } catch (err) {
@@ -225,6 +285,10 @@ export {
     insertItemInCart,
     modifyQuantityInCart,
     emptyCart,
+
+    fetchOrder,
+    fetchOrders,
+    insertOrder,
 
     insertProduct,
     fetchProducts,
