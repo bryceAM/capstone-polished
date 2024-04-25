@@ -1,0 +1,68 @@
+
+#redirectContainer {
+    color: white;
+}
+
+#loginContent {
+    background-image: url("https://i.imgur.com/FqHABPk.jpg");
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.loginCard {
+    position: relative;
+    width: 300px;
+    height: 200px;
+    margin: 40px;
+    margin-top: 200px;;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #3586ff, #b3d2ff);
+}
+
+.loginCard::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    transform: translateY(30px) scale(0.9);
+    z-index: -1;
+    background: linear-gradient(135deg, #3586ff, #8cb9fc);
+    filter: blur(25px);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#username, #password {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#usernameLabel, #passwordLabel {
+    margin-right: 1rem;
+    color: white;
+}
+
+button {
+    max-width: 40%;
+    margin-bottom: .5rem;
+}
+
+#registerContainer, #registerContainer > * {
+    color: white;
+    font-size: .9rem;
+    text-decoration: none;
+}
+
+#registerContainer > *:hover {
+    text-decoration:underline;
+}
