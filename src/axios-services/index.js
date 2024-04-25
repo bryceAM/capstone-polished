@@ -343,7 +343,7 @@ const verifyUser = async (token) => {
         and return important user credentials.
     */
     try {
-        const data = await axios.get(`/api/users/${token}`);
+        const data = await axios.get(`/api/users/token/${token}`);
 
         return data;
     } catch (err) {
