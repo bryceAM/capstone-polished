@@ -70,7 +70,7 @@ async function updateQuantity({productId, cartId, quantity}) {
     try {
         const { rows } = await client.query(`
             UPDATE active_cart_items
-            SET quantity = $3
+            SET quantity = quantity + $3
             WHERE active_cart_id = $1 AND product_id = $2
             RETURNING *;
         `, [cartId, productId, quantity]);
@@ -103,7 +103,7 @@ async function removeItemFromCart(cartId, itemId) {
 
 async function getAllItemsInCart(cartId) {
     /*
-    
+        get all items from the specified cart
     */
     try {
         const { rows } = await client.query(`
@@ -121,7 +121,7 @@ async function getAllItemsInCart(cartId) {
 
 async function emptyCart(cartId) {
     /*
-    
+        delete all items in the cart with the specified id.
     */
     try {
         const { rows } = await client.query(`
