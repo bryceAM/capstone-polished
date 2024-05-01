@@ -33,8 +33,8 @@ async function getActiveCart(userId) {
         const { rows } = await client.query(`
             SELECT *
             FROM active_cart
-            WHERE user_id=${userId};
-        `);
+            WHERE user_id = $1;
+        `, [userId]);
 
         return rows;
     } catch (err) {
@@ -109,8 +109,8 @@ async function getAllItemsInCart(cartId) {
         const { rows } = await client.query(`
             SELECT *
             FROM active_cart_items
-            WHERE active_cart_id=${cartId};
-        `);
+            WHERE active_cart_id = $1;
+        `, [cartId]);
 
         return rows;
     } catch (err) {
