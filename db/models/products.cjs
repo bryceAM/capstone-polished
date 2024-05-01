@@ -88,7 +88,7 @@ async function getProductById(productId) {
         const { rows: [product] } = await client.query(`
             SELECT *
             FROM products
-            WHERE id=$1;
+            WHERE id = $1;
         `, [productId]);
 
         if (!product) {
@@ -124,9 +124,9 @@ async function updateProduct({ id, ...fields }) {
         const { rows } = await client.query(`
             UPDATE products
             SET ${setString}
-            WERE id=${id}
+            WERE id=$${Object.keys(fields).length + 1}
             RETURNING *;
-        `, Object.values(fields));
+        `, [...Object.values(fields), id]);
 
         return rows;
     } catch (err) {
