@@ -297,7 +297,7 @@ const loginUser = async (username, password) => {
     };
 };
 
-const insertUser = async (username, password, userEmail, userFirstName, userLastName, userAddress, userCity, userState, userZip) => {
+const insertUser = async (username, password, userEmail, userFirstName, userLastName, userAddress, userAddress2, userCity, userState, userZip) => {
     /*
         this function uses an api/users post route to create a new
         user in the database.
@@ -310,6 +310,7 @@ const insertUser = async (username, password, userEmail, userFirstName, userLast
             userFirstName: userFirstName,
             userLastName: userLastName,
             userAddress: userAddress,
+            userAddress2: userAddress2,
             userCity: userCity,
             userState: userState,
             userZip: userZip

@@ -11,6 +11,7 @@ async function createUser({
     userFirstName,
     userLastName,
     userAddress,
+    userAddress2,
     userCity,
     userState,
     userZip,
@@ -27,11 +28,11 @@ async function createUser({
         const encodedHashedPassword = hashedPassword.toString('base64');
 
         const { rows: [user] } = await client.query(`
-            INSERT INTO users(username, password, salt, useremail, userfirstname, userlastname, useraddress, usercity, userstate, userzip, isadmin)
+            INSERT INTO users(username, password, salt, useremail, userfirstname, userlastname, useraddress, useraddress2, usercity, userstate, userzip, isadmin)
             VALUES($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
             ON CONFLICT (username) DO NOTHING
             RETURNING *;
-        `, [username, encodedHashedPassword, salt, userEmail, userFirstName, userLastName, userAddress, userCity, userState, userZip, isAdmin])
+        `, [username, encodedHashedPassword, salt, userEmail, userFirstName, userLastName, userAddress, userAddress2, userCity, userState, userZip, isAdmin])
 
         return user;
     } catch (err) {

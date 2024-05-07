@@ -43,6 +43,7 @@ async function buildTables() {
                 userfirstname varchar(255) UNIQUE NOT NULL,
                 userlastname varchar(255) UNIQUE NOT NULL,
                 useraddress varchar(255) NOT NULL,
+                useraddress2 varchar(255),
                 usercity varchar(255) NOT NULL,
                 userstate varchar(255) NOT NULL,
                 userzip varchar(255) NOT NULL,
@@ -400,6 +401,7 @@ async function populateInitialData() {
                         userFirstName: 'Jimi',
                         userLastName: 'Hendrix',
                         userAddress: '1524A Haight St.',
+                        userAddress2: '',
                         userCity: 'Seattle',
                         userState: 'Washington',
                         userZip: '98101'
@@ -411,6 +413,7 @@ async function populateInitialData() {
                         userFirstName: 'Brian',
                         userLastName: 'May',
                         userAddress: 'Oxford St.',
+                        userAddress2: '',
                         userCity: 'London',
                         userState: 'England',
                         userZip: 'E1 7AY'
@@ -422,6 +425,7 @@ async function populateInitialData() {
                         userFirstName: 'Carlos',
                         userLastName: 'Santana',
                         userAddress: '2115 Jalisco St.',
+                        userAddress2: '',
                         userCity: 'Jalisco',
                         userState: 'Mexico',
                         userZip: '78954'
@@ -433,6 +437,7 @@ async function populateInitialData() {
                         userFirstName: 'bob',
                         userLastName: 'bob',
                         userAddress: 'bob St.',
+                        userAddress2: '',
                         userCity: 'bob city',
                         userState: 'bob',
                         userZip: '13013',
