@@ -57,7 +57,7 @@ usersRouter.post('/register', async (req, res, next) => {
         send the user, message, and signed token back in the response to the calling function.
     */
     try {
-        const { username, password, userEmail, userFirstName, userLastName, userAddress, userCity, userState, userZip } = req.body;
+        const { username, password, userEmail, userFirstName, userLastName, userAddress, userAddress2, userCity, userState, userZip } = req.body;
 
         const userExists = await getUserByUsername(username);
 
@@ -69,7 +69,7 @@ usersRouter.post('/register', async (req, res, next) => {
         if (password.length < 6) throw new Error('PasswordLengthError: Password needs to be at least 6 characters');
 
         const user = await queryTransaction(() => createUser({
-            username, password, userEmail, userFirstName, userLastName, userAddress, userCity, userState, userZip
+            username, password, userEmail, userFirstName, userLastName, userAddress, userAddress2, userCity, userState, userZip
         }));
 
         if (!user) throw new Error('UserCreationError: Unable to create user');
@@ -122,7 +122,7 @@ usersRouter.get('/token/:token', async (req, res, next) => {
     /*
         destructure the token from the params.
         return the user to result if verification is successful.
-        send the user object in the response.
+        send certain user info back in the response.
     */
     const { token } = req.params;
 
@@ -156,7 +156,7 @@ usersRouter.get('/', async (req, res, next) => {
         res.send(allUsers);
     } catch (err) {
         // propagate error up to axios-services
-        next(err)
+        next(err);
     };
 });
 
@@ -172,7 +172,7 @@ usersRouter.get('/:username', async (req, res, next) => {
     } catch (err) {
         // propagate error up to axios-services
         next(err);
-    }
+    };
 });
 
 module.exports = usersRouter;
