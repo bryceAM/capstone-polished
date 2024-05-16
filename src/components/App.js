@@ -1,12 +1,14 @@
 import { Routes, Route } from 'react-router-dom';
+import { fetchUser, verifyUser } from '../axios-services/index.js';
+import '../styles/App.css';
+// Component namespace
 import HomePage from './HomePage.js';
 import SingleProduct from './SingleProduct.js';
 import Login from './Login.js';
 import UnderConstruction from './UnderConstruction.js';
 import Header from './Header.js';
 import Context from '../context.js';
-import '../styles/App.css';
-import { fetchUser, verifyUser } from '../axios-services/index.js';
+import Register from './Register.js';
 
 function App() {
   // get this value from localStorage or a key from local storage and database entry. for now set it to a boolean as a placeholder for testing purposes
@@ -61,6 +63,7 @@ function App() {
           <Route path="/UnderConstruction" element={<UnderConstruction />} />
           <Route path="/login" element={<Login token={token} setToken={setToken} setUser={setUser} />} />
           <Route path="/products/:productId" element={<SingleProduct user={user} />} />
+          <Route path="/register" element={<Register token={token} setToken={setToken} />} />
         </Routes>
       </Context.Provider>
     </div>

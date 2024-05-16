@@ -1,0 +1,66 @@
+#redirectContainer {
+    color: white;
+}
+
+#registerContent {
+    background-image: url("https://i.imgur.com/FqHABPk.jpg");
+    background-size: cover;
+    height: 100vh;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.registerCard {
+    position: relative;
+    width: 300px;
+    max-height: 450px;
+    margin: 50px 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #3586ff, #b3d2ff);
+}
+
+.registerCard::before {
+    content: '';
+    position: absolute;
+    inset: -4px;
+    transform: translateY(30px) scale(0.9);
+    z-index: -1;
+    background: linear-gradient(135deg, #3586ff, #8cb9fc);
+    filter: blur(25px);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+#username, #password, #firstName, #lastName, #email, #address, #city, #state, #zip {
+    margin-bottom: 1rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#usernameLabel, #passwordLabel, #firstNameLabel, #lastNameLabel, #emailLabel, #addressLabel, #cityLabel, #stateLabel, #zipLabel {
+    margin-right: 1rem;
+    color: white;
+}
+
+button {
+    max-width: 40%;
+    margin-bottom: .5rem;
+}
+
+#loginContainer, #loginContainer > * {
+    color: white;
+    font-size: .9rem;
+    text-decoration: none;
+}
+
+#loginContainer > *:hover {
+    text-decoration:underline;
+}
