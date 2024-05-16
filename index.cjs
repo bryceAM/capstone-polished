@@ -37,8 +37,8 @@ server.listen(SERVER_PORT, async () => {
   try {
     await client.connect();
     console.log('Database is open for business!');
-  } catch (error) {
-    console.error('Database is closed for repairs!\n', error);
+  } catch (err) {
+    console.error('Database is closed for repairs!\n', err);
   }
 });
 
